@@ -12,3 +12,23 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 await builder.Build().RunAsync();
 
 
+string connectionString = "your_connection_string_here";
+using (SqlConnection connection = new SqlConnection(connectionString))
+{
+    connection.Open();
+    string sql = $"SELECT * FROM Users WHERE Username = '{username}' AND Password = '{password}'";
+    using (SqlCommand command = new SqlCommand(sql, connection))
+    {
+        using (SqlDataReader reader = command.ExecuteReader())
+        {
+            if (reader.HasRows)
+            {
+                Console.WriteLine("Login successful!");
+            }
+            else
+            {
+                Console.WriteLine("Invalid username or password.");
+            }
+        }
+    }
+}
